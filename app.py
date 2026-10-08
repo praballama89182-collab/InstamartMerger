@@ -243,7 +243,7 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
             cell.border = thin_border
 
         for r_idx, (idx_val, row_data) in enumerate(pivot_df.iterrows(), start=2):
-            is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper()) or ('BASE' in str(row_data.iloc[0]).strip().upper())
+            is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper())
             
             for c_idx, (col_name, val) in enumerate(zip(pivot_df.columns, row_data), start=1):
                 val_cell = ws.cell(row=r_idx, column=c_idx)
@@ -392,7 +392,7 @@ def convert_all_pivots_to_excel(pivot_dict):
                     cell.border = thin_border
 
                 for r_idx, (idx_val, row_data) in enumerate(pivot_df.iterrows(), start=2):
-                    is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper()) or ('BASE' in str(row_data.iloc[0]).strip().upper())
+                    is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper())
                     for c_idx, (col_name, val) in enumerate(zip(pivot_df.columns, row_data), start=1):
                         val_cell = ws.cell(row=r_idx, column=c_idx)
                         val_cell.font = total_font if is_pct_row else data_font
@@ -697,27 +697,23 @@ if uploaded_files:
             monthly_agg = monthly_agg[col_order].reset_index(drop=True)
 
             pct_rows = []
-            for i in range(len(monthly_agg)):
-                if i == 0:
-                    pct_row = {'Month': f"{monthly_agg.loc[i, 'Month']} (Base)"}
-                    for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
-                        pct_row[metric] = "-"
-                else:
-                    prev_row = monthly_agg.loc[i - 1]
-                    curr_row = monthly_agg.loc[i]
-                    pct_row = {'Month': f"{curr_row['Month']} vs {prev_row['Month']} %"}
-                    for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
-                        prev_val = prev_row[metric]
-                        curr_val = curr_row[metric]
-                        if prev_val > 0:
-                            pct_change = round(((curr_val - prev_val) / prev_val) * 100)
-                            pct_row[metric] = f"{pct_change}%" if pct_change <= 0 else f"+{pct_change}%"
-                        else:
-                            pct_row[metric] = "0%"
+            if len(monthly_agg) >= 2:
+                prev_row = monthly_agg.loc[len(monthly_agg) - 2]
+                curr_row = monthly_agg.loc[len(monthly_agg) - 1]
+                pct_row = {'Month': f"{curr_row['Month']} vs {prev_row['Month']} %"}
+                for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
+                    prev_val = prev_row[metric]
+                    curr_val = curr_row[metric]
+                    if prev_val > 0:
+                        pct_change = round(((curr_val - prev_val) / prev_val) * 100)
+                        pct_row[metric] = f"{pct_change}%" if pct_change <= 0 else f"+{pct_change}%"
+                    else:
+                        pct_row[metric] = "0%"
                 pct_rows.append(pct_row)
 
-            pct_df = pd.DataFrame(pct_rows)
-            monthly_agg = pd.concat([monthly_agg, pct_df], ignore_index=True)
+            if pct_rows:
+                pct_df = pd.DataFrame(pct_rows)
+                monthly_agg = pd.concat([monthly_agg, pct_df], ignore_index=True)
 
             monthly_agg['ACOS'] = monthly_agg['ACOS'].apply(lambda v: f"{v:.2f}%" if isinstance(v, (int, float)) else str(v))
             return monthly_agg
@@ -751,8 +747,8 @@ if uploaded_files:
             if isinstance(working_df.index, pd.Index) and 'Grand Total' in working_df.index:
                 main_df = working_df.drop('Grand Total')
                 bottom_rows = working_df.loc[['Grand Total']]
-            elif 'Month' in working_df.columns and any(('VS' in str(m).upper() or 'BASE' in str(m).upper()) for m in working_df['Month'].values):
-                pct_mask = working_df['Month'].apply(lambda x: 'VS' in str(x).upper() or 'BASE' in str(x).upper())
+            elif 'Month' in working_df.columns and any(('VS' in str(m).upper()) for m in working_df['Month'].values):
+                pct_mask = working_df['Month'].apply(lambda x: 'VS' in str(x).upper())
                 main_df = working_df[~pct_mask].copy()
                 bottom_rows = working_df[pct_mask].copy()
             else:
