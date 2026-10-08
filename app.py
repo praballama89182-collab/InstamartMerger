@@ -243,7 +243,7 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
             cell.border = thin_border
 
         for r_idx, (idx_val, row_data) in enumerate(pivot_df.iterrows(), start=2):
-            is_pct_row = (str(row_data.iloc[0]).strip().lower() == 'percentage %')
+            is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper()) or ('BASE' in str(row_data.iloc[0]).strip().upper())
             
             for c_idx, (col_name, val) in enumerate(zip(pivot_df.columns, row_data), start=1):
                 val_cell = ws.cell(row=r_idx, column=c_idx)
@@ -392,7 +392,7 @@ def convert_all_pivots_to_excel(pivot_dict):
                     cell.border = thin_border
 
                 for r_idx, (idx_val, row_data) in enumerate(pivot_df.iterrows(), start=2):
-                    is_pct_row = (str(row_data.iloc[0]).strip().lower() == 'percentage %')
+                    is_pct_row = ('VS' in str(row_data.iloc[0]).strip().upper()) or ('BASE' in str(row_data.iloc[0]).strip().upper())
                     for c_idx, (col_name, val) in enumerate(zip(pivot_df.columns, row_data), start=1):
                         val_cell = ws.cell(row=r_idx, column=c_idx)
                         val_cell.font = total_font if is_pct_row else data_font
@@ -472,7 +472,6 @@ if uploaded_files:
         
         try:
             if uploaded_file.name.endswith('.csv'):
-                # Swiggy CSV files often have metadata rows in the first 6 lines
                 df = pd.read_csv(uploaded_file, skiprows=6)
                 sheet_name = "Sheet1"
                 raw_files_dict[uploaded_file.name][sheet_name] = df.copy()
@@ -564,15 +563,15 @@ if uploaded_files:
         else:
             final_df['Week'] = np.nan
 
-        MONTH_ORDER_DESC = {
+        MONTH_ORDER = {
             "JANUARY": 1, "FEBRUARY": 2, "MARCH": 3, "APRIL": 4,
             "MAY": 5, "JUNE": 6, "JULY": 7, "AUGUST": 8,
             "SEPTEMBER": 9, "OCTOBER": 10, "NOVEMBER": 11, "DECEMBER": 12
         }
 
-        def get_calendar_months_desc(df_input):
+        def get_calendar_months(df_input):
             months = [str(x).strip().upper() for x in df_input['Month'].dropna().unique()]
-            return sorted(months, key=lambda x: MONTH_ORDER_DESC.get(x, -1), reverse=True)
+            return sorted(months, key=lambda x: MONTH_ORDER.get(x, 99))
 
         def compute_grouped_table(df_subset, group_col, selected_item="All"):
             if group_col not in df_subset.columns:
@@ -635,7 +634,7 @@ if uploaded_files:
             )
 
             metrics_order = ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']
-            all_months = get_calendar_months_desc(df_input)
+            all_months = get_calendar_months(df_input)
             
             pivot_df = pivot_df.reorder_levels([1, 0], axis=1)
             sorted_cols = pd.MultiIndex.from_product([all_months, metrics_order], names=['Month', 'Metric'])
@@ -687,7 +686,7 @@ if uploaded_files:
             monthly_agg['Spends'] = monthly_agg['Spends'].round(2)
             monthly_agg['Sales'] = monthly_agg['Sales'].round(2)
 
-            all_months = get_calendar_months_desc(df_input)
+            all_months = get_calendar_months(df_input)
             month_order = {m: i for i, m in enumerate(all_months)}
             monthly_agg['month_order'] = monthly_agg['Month'].map(
                 lambda x: month_order.get(str(x).strip().upper(), 99)
@@ -695,23 +694,30 @@ if uploaded_files:
             monthly_agg = monthly_agg.sort_values('month_order').drop(columns=['month_order'])
 
             col_order = ['Month', 'Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']
-            monthly_agg = monthly_agg[col_order]
+            monthly_agg = monthly_agg[col_order].reset_index(drop=True)
 
-            if len(monthly_agg) >= 2:
-                curr_row = monthly_agg.iloc[0]
-                prev_row = monthly_agg.iloc[1]
+            pct_rows = []
+            for i in range(len(monthly_agg)):
+                if i == 0:
+                    pct_row = {'Month': f"{monthly_agg.loc[i, 'Month']} (Base)"}
+                    for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
+                        pct_row[metric] = "-"
+                else:
+                    prev_row = monthly_agg.loc[i - 1]
+                    curr_row = monthly_agg.loc[i]
+                    pct_row = {'Month': f"{curr_row['Month']} vs {prev_row['Month']} %"}
+                    for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
+                        prev_val = prev_row[metric]
+                        curr_val = curr_row[metric]
+                        if prev_val > 0:
+                            pct_change = round(((curr_val - prev_val) / prev_val) * 100)
+                            pct_row[metric] = f"{pct_change}%" if pct_change <= 0 else f"+{pct_change}%"
+                        else:
+                            pct_row[metric] = "0%"
+                pct_rows.append(pct_row)
 
-                pct_row = {'Month': 'Percentage %'}
-                for metric in ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']:
-                    prev_val = prev_row[metric]
-                    curr_val = curr_row[metric]
-                    if prev_val > 0:
-                        pct_change = round(((curr_val - prev_val) / prev_val) * 100)
-                        pct_row[metric] = f"{pct_change}%" if pct_change <= 0 else f"+{pct_change}%"
-                    else:
-                        pct_row[metric] = "0%"
-                
-                monthly_agg = pd.concat([monthly_agg, pd.DataFrame([pct_row])], ignore_index=True)
+            pct_df = pd.DataFrame(pct_rows)
+            monthly_agg = pd.concat([monthly_agg, pct_df], ignore_index=True)
 
             monthly_agg['ACOS'] = monthly_agg['ACOS'].apply(lambda v: f"{v:.2f}%" if isinstance(v, (int, float)) else str(v))
             return monthly_agg
@@ -745,9 +751,10 @@ if uploaded_files:
             if isinstance(working_df.index, pd.Index) and 'Grand Total' in working_df.index:
                 main_df = working_df.drop('Grand Total')
                 bottom_rows = working_df.loc[['Grand Total']]
-            elif 'Month' in working_df.columns and 'Percentage %' in working_df['Month'].values:
-                main_df = working_df[working_df['Month'] != 'Percentage %'].copy()
-                bottom_rows = working_df[working_df['Month'] == 'Percentage %'].copy()
+            elif 'Month' in working_df.columns and any(('VS' in str(m).upper() or 'BASE' in str(m).upper()) for m in working_df['Month'].values):
+                pct_mask = working_df['Month'].apply(lambda x: 'VS' in str(x).upper() or 'BASE' in str(x).upper())
+                main_df = working_df[~pct_mask].copy()
+                bottom_rows = working_df[pct_mask].copy()
             else:
                 main_df = working_df
                 bottom_rows = None
@@ -794,7 +801,7 @@ if uploaded_files:
             )
 
         st.markdown("### 🔍 Global Dashboard Filters")
-        available_months = ["All Months"] + get_calendar_months_desc(final_df)
+        available_months = ["All Months"] + get_calendar_months(final_df)
         selected_month = st.selectbox("Select Month Across Dashboard (Excluding Comparison Tables)", available_months)
 
         filtered_df = final_df.copy()
@@ -902,7 +909,7 @@ if uploaded_files:
 
         with main_tab4:
             st.subheader("📈 Interactive Multi-Metric Trend Analytics")
-            all_df_months = get_calendar_months_desc(final_df)
+            all_df_months = get_calendar_months(final_df)
             selected_trend_months = st.multiselect("Select Months:", options=all_df_months, default=all_df_months, key="trend_m")
 
             metric_map = {
@@ -931,6 +938,10 @@ if uploaded_files:
                 monthly_summary['CPM'] = monthly_summary.apply(lambda r: round((r['_budget_consumed'] / r['_impressions']) * 1000) if r['_impressions'] > 0 else 0, axis=1)
                 monthly_summary['ROAS'] = monthly_summary.apply(lambda r: round(r['_sales'] / r['_budget_consumed'], 2) if r['_budget_consumed'] > 0 else 0.0, axis=1)
                 monthly_summary['ACOS'] = monthly_summary.apply(lambda r: round((r['_budget_consumed'] / r['_sales']) * 100, 2) if r['_sales'] > 0 else 0.0, axis=1)
+
+                month_order = {m: i for i, m in enumerate(all_df_months)}
+                monthly_summary['month_order'] = monthly_summary['Month'].map(lambda x: month_order.get(str(x).strip().upper(), 99))
+                monthly_summary = monthly_summary.sort_values('month_order').drop(columns=['month_order'])
 
                 fig_trend = make_subplots(specs=[[{"secondary_y": True}]])
                 metric_colors = {'GMV / Sales (₹)': '#FC8019', 'Budget Burnt (₹)': '#F8B48B', 'ROAS': '#D4620A', 'Orders / Conversions': '#6AAE9B', 'Add To Cart (ATC)': '#A18DB8', 'Impressions': '#7FA7A3', 'ACOS (%)': '#C28FA0', 'CPM (₹)': '#B39A70'}
