@@ -17,15 +17,15 @@ st.set_page_config(
 st.markdown("""
 <style>
     :root {
-        --primary-blue: #1E88E5;
-        --primary-blue-dark: #1565C0;
-        --primary-blue-light: #E3F2FD;
-        --primary-border: #BBDEFB;
-        --primary-text: #3D3D3D;
+        --primary-blue: #2B6CB0;
+        --primary-blue-dark: #1A365D;
+        --primary-blue-light: #EBF3FB;
+        --primary-border: #CBD5E0;
+        --primary-text: #2D3748;
     }
 
     .stApp {
-        background: linear-gradient(180deg, #F4F8FB 0%, #FFFFFF 40%);
+        background: linear-gradient(180deg, #F7FAFC 0%, #FFFFFF 40%);
         color: var(--primary-text);
     }
 
@@ -39,16 +39,16 @@ st.markdown("""
     }
 
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #E3F2FD 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #EBF3FB 100%);
         border: 1px solid var(--primary-border);
         border-left: 5px solid var(--primary-blue);
         border-radius: 12px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(30, 136, 229, 0.10);
+        box-shadow: 0 3px 12px rgba(43, 108, 176, 0.08);
     }
 
     [data-testid="stMetricLabel"] {
-        color: #5A6B7C !important;
+        color: #4A5568 !important;
         font-weight: 600 !important;
     }
 
@@ -59,7 +59,7 @@ st.markdown("""
 
     .stTabs [data-baseweb="tab-list"] {
         gap: 5px;
-        background: #E3F2FD;
+        background: #EBF3FB;
         border: 1px solid var(--primary-border);
         border-radius: 12px;
         padding: 5px;
@@ -68,14 +68,14 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         height: 42px;
         border-radius: 7px;
-        color: #1565C0;
+        color: #2B6CB0;
         font-weight: 600;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%) !important;
+        background: linear-gradient(135deg, #2B6CB0 0%, #1A365D 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(30, 136, 229, 0.25);
+        box-shadow: 0 2px 7px rgba(43, 108, 176, 0.25);
     }
 
     [data-testid="stFileUploader"] {
@@ -83,30 +83,30 @@ st.markdown("""
         border: 1px solid var(--primary-border);
         border-radius: 12px;
         padding: 8px;
-        box-shadow: 0 2px 8px rgba(30, 136, 229, 0.07);
+        box-shadow: 0 2px 8px rgba(43, 108, 176, 0.06);
     }
 
     [data-testid="stFileUploaderDropzone"] {
-        background: #F9FBFC;
-        border: 1px dashed #90CAF9;
+        background: #F7FAFC;
+        border: 1px dashed #A3C9F1;
         border-radius: 9px;
     }
 
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #1E88E5, #1565C0) !important;
+        background: linear-gradient(135deg, #2B6CB0, #1A365D) !important;
         color: #FFFFFF !important;
         border: 0 !important;
         border-radius: 8px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(30, 136, 229, 0.20);
+        box-shadow: 0 2px 7px rgba(43, 108, 176, 0.20);
     }
 
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #0D47A1 !important;
+        background: #1A365D !important;
         color: #FFFFFF !important;
     }
 
@@ -114,7 +114,7 @@ st.markdown("""
         border: 1px solid var(--primary-border);
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(30, 136, 229, 0.06);
+        box-shadow: 0 2px 9px rgba(43, 108, 176, 0.05);
     }
 
     [data-testid="stDataFrame"] th,
@@ -124,13 +124,13 @@ st.markdown("""
     }
 
     [data-testid="stDataFrame"] th {
-        background: #BBDEFB !important;
-        color: #0D47A1 !important;
+        background: #D0E3F8 !important;
+        color: #1A365D !important;
         font-weight: 700 !important;
     }
 
     hr {
-        border-color: #D0E1F9 !important;
+        border-color: #E2E8F0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -144,11 +144,11 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     ws = wb.active
     ws.title = sheet_name[:31]
     
-    top_header_fill = PatternFill(start_color="1E88E5", end_color="1E88E5", fill_type="solid")
+    top_header_fill = PatternFill(start_color="2B6CB0", end_color="2B6CB0", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
     
-    sec_header_fill = PatternFill(start_color="E3F2FD", end_color="E3F2FD", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1565C0")
+    sec_header_fill = PatternFill(start_color="EBF3FB", end_color="EBF3FB", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1A365D")
     
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
@@ -295,10 +295,10 @@ def convert_all_pivots_to_excel(pivot_dict):
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    top_header_fill = PatternFill(start_color="1E88E5", end_color="1E88E5", fill_type="solid")
+    top_header_fill = PatternFill(start_color="2B6CB0", end_color="2B6CB0", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="E3F2FD", end_color="E3F2FD", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1565C0")
+    sec_header_fill = PatternFill(start_color="EBF3FB", end_color="EBF3FB", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1A365D")
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
     total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
@@ -840,13 +840,24 @@ if uploaded_files:
         ])
 
         with main_tab1:
-            st.caption("Inspect individual sheets tab-by-tab for each uploaded file.")
-            selected_file_name = st.selectbox("Select Uploaded File to Preview:", list(raw_files_dict.keys()))
+            st.caption("Inspect and filter raw data by searching campaign names.")
+            selected_file_name = st.selectbox("Select Uploaded File to Preview:", list(raw_files_dict.keys()), key="raw_file_sel")
             if selected_file_name:
                 sheets = raw_files_dict[selected_file_name]
-                selected_sheet = st.selectbox("Select Sheet Tab:", list(sheets.keys()))
+                selected_sheet = st.selectbox("Select Sheet Tab:", list(sheets.keys()), key="raw_sheet_sel")
                 if selected_sheet:
-                    st.dataframe(format_dashboard_dataframe(sheets[selected_sheet].head(100)), use_container_width=True, hide_index=True)
+                    sheet_df = sheets[selected_sheet].copy()
+                    
+                    search_query = st.text_input("🔍 Search by Campaign Name (e.g. crackers):", "", key="campaign_search_input")
+                    
+                    if search_query.strip():
+                        if 'CAMPAIGN_NAME' in sheet_df.columns:
+                            mask = sheet_df['CAMPAIGN_NAME'].astype(str).str.contains(search_query.strip(), case=False, na=False)
+                            sheet_df = sheet_df[mask]
+                        else:
+                            st.warning("Column 'CAMPAIGN_NAME' not found in this sheet for searching.")
+                    
+                    st.dataframe(format_dashboard_dataframe(sheet_df.head(100)), use_container_width=True, hide_index=True)
 
         with main_tab2:
             st.caption("Preview the combined dataset across all uploaded files.")
@@ -940,13 +951,13 @@ if uploaded_files:
                 monthly_summary = monthly_summary.sort_values('month_order').drop(columns=['month_order'])
 
                 fig_trend = make_subplots(specs=[[{"secondary_y": True}]])
-                metric_colors = {'GMV / Sales (₹)': '#1E88E5', 'Budget Burnt (₹)': '#90CAF9', 'ROAS': '#1565C0', 'Orders / Conversions': '#26A69A', 'Add To Cart (ATC)': '#7986CB', 'Impressions': '#4DB6AC', 'ACOS (%)': '#AB47BC', 'CPM (₹)': '#8D6E63'}
+                metric_colors = {'GMV / Sales (₹)': '#2B6CB0', 'Budget Burnt (₹)': '#90CDF4', 'ROAS': '#1A365D', 'Orders / Conversions': '#319795', 'Add To Cart (ATC)': '#667EEA', 'Impressions': '#38B2AC', 'ACOS (%)': '#9F7AEA', 'CPM (₹)': '#B7791F'}
                 bar_metrics = {'GMV / Sales (₹)', 'Budget Burnt (₹)'}
 
                 for metric_label in selected_trend_metrics:
                     col_key = metric_map[metric_label]
                     use_sec_y = metric_label in ['ROAS', 'ACOS (%)', 'CPM (₹)']
-                    color = metric_colors.get(metric_label, '#1E88E5')
+                    color = metric_colors.get(metric_label, '#2B6CB0')
                     values = monthly_summary[col_key]
 
                     if metric_label in bar_metrics:
