@@ -10,23 +10,23 @@ from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 st.set_page_config(
     page_title="Swiggy Granular Ad Analytics Dashboard",
-    page_icon="🟠",
+    page_icon="🔵",
     layout="wide"
 )
 
 st.markdown("""
 <style>
     :root {
-        --swiggy-orange: #FC8019;
-        --swiggy-orange-dark: #D4620A;
-        --swiggy-orange-light: #FFF5EE;
-        --swiggy-border: #FAD4BD;
-        --swiggy-text: #3D3D3D;
+        --primary-blue: #1E88E5;
+        --primary-blue-dark: #1565C0;
+        --primary-blue-light: #E3F2FD;
+        --primary-border: #BBDEFB;
+        --primary-text: #3D3D3D;
     }
 
     .stApp {
-        background: linear-gradient(180deg, #FFF9F5 0%, #FFFFFF 40%);
-        color: var(--swiggy-text);
+        background: linear-gradient(180deg, #F4F8FB 0%, #FFFFFF 40%);
+        color: var(--primary-text);
     }
 
     [data-testid="stHeader"] {
@@ -34,33 +34,33 @@ st.markdown("""
     }
 
     h1, h2, h3 {
-        color: var(--swiggy-orange-dark) !important;
+        color: var(--primary-blue-dark) !important;
         font-weight: 700 !important;
     }
 
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF2EB 100%);
-        border: 1px solid var(--swiggy-border);
-        border-left: 5px solid var(--swiggy-orange);
+        background: linear-gradient(135deg, #FFFFFF 0%, #E3F2FD 100%);
+        border: 1px solid var(--primary-border);
+        border-left: 5px solid var(--primary-blue);
         border-radius: 12px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(252, 128, 25, 0.10);
+        box-shadow: 0 3px 12px rgba(30, 136, 229, 0.10);
     }
 
     [data-testid="stMetricLabel"] {
-        color: #7A6A5E !important;
+        color: #5A6B7C !important;
         font-weight: 600 !important;
     }
 
     [data-testid="stMetricValue"] {
-        color: var(--swiggy-orange-dark) !important;
+        color: var(--primary-blue-dark) !important;
         font-weight: 750 !important;
     }
 
     .stTabs [data-baseweb="tab-list"] {
         gap: 5px;
-        background: #FFF2EB;
-        border: 1px solid var(--swiggy-border);
+        background: #E3F2FD;
+        border: 1px solid var(--primary-border);
         border-radius: 12px;
         padding: 5px;
     }
@@ -68,53 +68,53 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         height: 42px;
         border-radius: 7px;
-        color: #8C532B;
+        color: #1565C0;
         font-weight: 600;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #FC8019 0%, #D4620A 100%) !important;
+        background: linear-gradient(135deg, #1E88E5 0%, #1565C0 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(252, 128, 25, 0.25);
+        box-shadow: 0 2px 7px rgba(30, 136, 229, 0.25);
     }
 
     [data-testid="stFileUploader"] {
         background: #FFFFFF;
-        border: 1px solid var(--swiggy-border);
+        border: 1px solid var(--primary-border);
         border-radius: 12px;
         padding: 8px;
-        box-shadow: 0 2px 8px rgba(252, 128, 25, 0.07);
+        box-shadow: 0 2px 8px rgba(30, 136, 229, 0.07);
     }
 
     [data-testid="stFileUploaderDropzone"] {
-        background: #FFFBF9;
-        border: 1px dashed #F8B48B;
+        background: #F9FBFC;
+        border: 1px dashed #90CAF9;
         border-radius: 9px;
     }
 
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #FC8019, #D4620A) !important;
+        background: linear-gradient(135deg, #1E88E5, #1565C0) !important;
         color: #FFFFFF !important;
         border: 0 !important;
         border-radius: 8px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(252, 128, 25, 0.20);
+        box-shadow: 0 2px 7px rgba(30, 136, 229, 0.20);
     }
 
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #C25405 !important;
+        background: #0D47A1 !important;
         color: #FFFFFF !important;
     }
 
     [data-testid="stDataFrame"] {
-        border: 1px solid var(--swiggy-border);
+        border: 1px solid var(--primary-border);
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(252, 128, 25, 0.06);
+        box-shadow: 0 2px 9px rgba(30, 136, 229, 0.06);
     }
 
     [data-testid="stDataFrame"] th,
@@ -124,19 +124,19 @@ st.markdown("""
     }
 
     [data-testid="stDataFrame"] th {
-        background: #FFEBE1 !important;
-        color: #D4620A !important;
+        background: #BBDEFB !important;
+        color: #0D47A1 !important;
         font-weight: 700 !important;
     }
 
     hr {
-        border-color: #FCE4DC !important;
+        border-color: #D0E1F9 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🟠 Swiggy Granular Ad Analytics & Merger Dashboard")
-st.write("Upload Swiggy granular advertising spreadsheets or CSV files. Inspect raw data, consolidated master tables, Month-on-Month comparison sheets, trend analytics, city performance, category breakdowns, and ad property insights.")
+st.title("🔵 Swiggy Granular Ad Analytics & Merger Dashboard")
+st.write("Upload Swiggy granular advertising spreadsheets or CSV files. Inspect raw data, consolidated master tables, Month-on-Month comparison sheets, trend analytics, city performance, product performance, and ad property insights.")
 
 def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     buffer = io.BytesIO()
@@ -144,11 +144,11 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     ws = wb.active
     ws.title = sheet_name[:31]
     
-    top_header_fill = PatternFill(start_color="FC8019", end_color="FC8019", fill_type="solid")
+    top_header_fill = PatternFill(start_color="1E88E5", end_color="1E88E5", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
     
-    sec_header_fill = PatternFill(start_color="FFEBE1", end_color="FFEBE1", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="D4620A")
+    sec_header_fill = PatternFill(start_color="E3F2FD", end_color="E3F2FD", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1565C0")
     
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
@@ -295,10 +295,10 @@ def convert_all_pivots_to_excel(pivot_dict):
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    top_header_fill = PatternFill(start_color="FC8019", end_color="FC8019", fill_type="solid")
+    top_header_fill = PatternFill(start_color="1E88E5", end_color="1E88E5", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="FFEBE1", end_color="FFEBE1", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="D4620A")
+    sec_header_fill = PatternFill(start_color="E3F2FD", end_color="E3F2FD", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1565C0")
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
     total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
@@ -833,7 +833,7 @@ if uploaded_files:
             "📈 Interactive Trend Analytics",
             "🎯 Campaign Performance",
             "🏙️ City Performance",
-            "🏷️ Category Breakdown",
+            "📦 Product Performance",
             "📢 Ad Property / Placement",
             "🔎 Keyword Performance",
             "📅 Weekly Trend"
@@ -857,14 +857,14 @@ if uploaded_files:
             monthly_summary_df = create_monthly_summary_table(final_df)
             camp_pivot = create_mom_comparison_table(final_df, 'CAMPAIGN_NAME') if 'CAMPAIGN_NAME' in final_df.columns else None
             city_pivot = create_mom_comparison_table(final_df, 'CITY') if 'CITY' in final_df.columns else None
-            cat_pivot = create_mom_comparison_table(final_df, 'L1_CATEGORY') if 'L1_CATEGORY' in final_df.columns else None
+            prod_pivot = create_mom_comparison_table(final_df, 'PRODUCT_NAME') if 'PRODUCT_NAME' in final_df.columns else None
             prop_pivot = create_mom_comparison_table(final_df, 'AD_PROPERTY') if 'AD_PROPERTY' in final_df.columns else None
 
             mom_dict = {
                 "Monthly_Summary": monthly_summary_df,
                 "Campaign_MoM": camp_pivot,
                 "City_MoM": city_pivot,
-                "Category_MoM": cat_pivot,
+                "Product_MoM": prod_pivot,
                 "AdProperty_MoM": prop_pivot
             }
             all_pivots_bytes = convert_all_pivots_to_excel(mom_dict)
@@ -883,7 +883,7 @@ if uploaded_files:
                 "📅 Monthly Summary",
                 "🎯 Campaign Comparison",
                 "🏙️ City Comparison",
-                "🏷️ Category Comparison",
+                "📦 Product Comparison",
                 "📢 Ad Property Comparison"
             ])
 
@@ -897,8 +897,8 @@ if uploaded_files:
                 if city_pivot is not None and not city_pivot.empty:
                     render_unified_single_table(city_pivot, key_prefix="city_pivot")
             with comp_sub_tab3:
-                if cat_pivot is not None and not cat_pivot.empty:
-                    render_unified_single_table(cat_pivot, key_prefix="cat_pivot")
+                if prod_pivot is not None and not prod_pivot.empty:
+                    render_unified_single_table(prod_pivot, key_prefix="prod_pivot")
             with comp_sub_tab4:
                 if prop_pivot is not None and not prop_pivot.empty:
                     render_unified_single_table(prop_pivot, key_prefix="prop_pivot")
@@ -940,13 +940,13 @@ if uploaded_files:
                 monthly_summary = monthly_summary.sort_values('month_order').drop(columns=['month_order'])
 
                 fig_trend = make_subplots(specs=[[{"secondary_y": True}]])
-                metric_colors = {'GMV / Sales (₹)': '#FC8019', 'Budget Burnt (₹)': '#F8B48B', 'ROAS': '#D4620A', 'Orders / Conversions': '#6AAE9B', 'Add To Cart (ATC)': '#A18DB8', 'Impressions': '#7FA7A3', 'ACOS (%)': '#C28FA0', 'CPM (₹)': '#B39A70'}
+                metric_colors = {'GMV / Sales (₹)': '#1E88E5', 'Budget Burnt (₹)': '#90CAF9', 'ROAS': '#1565C0', 'Orders / Conversions': '#26A69A', 'Add To Cart (ATC)': '#7986CB', 'Impressions': '#4DB6AC', 'ACOS (%)': '#AB47BC', 'CPM (₹)': '#8D6E63'}
                 bar_metrics = {'GMV / Sales (₹)', 'Budget Burnt (₹)'}
 
                 for metric_label in selected_trend_metrics:
                     col_key = metric_map[metric_label]
                     use_sec_y = metric_label in ['ROAS', 'ACOS (%)', 'CPM (₹)']
-                    color = metric_colors.get(metric_label, '#FC8019')
+                    color = metric_colors.get(metric_label, '#1E88E5')
                     values = monthly_summary[col_key]
 
                     if metric_label in bar_metrics:
@@ -970,10 +970,10 @@ if uploaded_files:
                 st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'CITY', sel_city)), use_container_width=True, hide_index=True)
 
         with main_tab7:
-            if 'L1_CATEGORY' in filtered_df.columns:
-                cat_opts = ["All"] + sorted([str(x) for x in filtered_df['L1_CATEGORY'].dropna().unique()])
-                sel_cat = st.selectbox("Select L1 Category:", cat_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'L1_CATEGORY', sel_cat)), use_container_width=True, hide_index=True)
+            if 'PRODUCT_NAME' in filtered_df.columns:
+                prod_opts = ["All"] + sorted([str(x) for x in filtered_df['PRODUCT_NAME'].dropna().unique()])
+                sel_prod = st.selectbox("Select Product Name:", prod_opts)
+                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'PRODUCT_NAME', sel_prod)), use_container_width=True, hide_index=True)
 
         with main_tab8:
             if 'AD_PROPERTY' in filtered_df.columns:
