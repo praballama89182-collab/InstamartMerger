@@ -10,24 +10,24 @@ from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 st.set_page_config(
     page_title="Swiggy Granular Ad Analytics Dashboard",
-    page_icon="🟧",
+    page_icon="🔮",
     layout="wide"
 )
 
 st.markdown("""
 <style>
     :root {
-        --swiggy-orange: #FC8019;
-        --swiggy-orange-dark: #D46B10;
-        --swiggy-orange-light: #FFF5EC;
-        --swiggy-orange-soft: #FDE8D8;
-        --swiggy-border: #F7D0B6;
-        --swiggy-text: #2D3748;
+        --lavender-primary: #6B46C1;
+        --lavender-dark: #44337A;
+        --lavender-light: #FAF5FF;
+        --lavender-soft: #E9D8FD;
+        --lavender-border: #D6BCFA;
+        --lavender-text: #2D3748;
     }
 
     .stApp {
-        background: linear-gradient(180deg, #FFFDFB 0%, #FFFFFF 40%);
-        color: var(--swiggy-text);
+        background: linear-gradient(180deg, #FBF9FF 0%, #FFFFFF 40%);
+        color: var(--lavender-text);
     }
 
     [data-testid="stHeader"] {
@@ -35,33 +35,33 @@ st.markdown("""
     }
 
     h1, h2, h3 {
-        color: var(--swiggy-orange-dark) !important;
+        color: var(--lavender-dark) !important;
         font-weight: 700 !important;
     }
 
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #FFF5EC 100%);
-        border: 1px solid var(--swiggy-border);
-        border-left: 5px solid var(--swiggy-orange);
+        background: linear-gradient(135deg, #FFFFFF 0%, #FAF5FF 100%);
+        border: 1px solid var(--lavender-border);
+        border-left: 5px solid var(--lavender-primary);
         border-radius: 12px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(252, 128, 25, 0.08);
+        box-shadow: 0 3px 12px rgba(107, 70, 193, 0.08);
     }
 
     [data-testid="stMetricLabel"] {
-        color: #6C757D !important;
+        color: #718096 !important;
         font-weight: 600 !important;
     }
 
     [data-testid="stMetricValue"] {
-        color: var(--swiggy-orange-dark) !important;
+        color: var(--lavender-dark) !important;
         font-weight: 750 !important;
     }
 
     .stTabs [data-baseweb="tab-list"] {
         gap: 5px;
-        background: #FFF5EC;
-        border: 1px solid var(--swiggy-border);
+        background: #FAF5FF;
+        border: 1px solid var(--lavender-border);
         border-radius: 12px;
         padding: 5px;
     }
@@ -69,53 +69,53 @@ st.markdown("""
     .stTabs [data-baseweb="tab"] {
         height: 42px;
         border-radius: 7px;
-        color: #D46B10;
+        color: var(--lavender-primary);
         font-weight: 600;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #FC8019 0%, #D46B10 100%) !important;
+        background: linear-gradient(135deg, #6B46C1 0%, #44337A 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(252, 128, 25, 0.25);
+        box-shadow: 0 2px 7px rgba(107, 70, 193, 0.25);
     }
 
     [data-testid="stFileUploader"] {
         background: #FFFFFF;
-        border: 1px solid var(--swiggy-border);
+        border: 1px solid var(--lavender-border);
         border-radius: 12px;
         padding: 8px;
-        box-shadow: 0 2px 8px rgba(252, 128, 25, 0.06);
+        box-shadow: 0 2px 8px rgba(107, 70, 193, 0.06);
     }
 
     [data-testid="stFileUploaderDropzone"] {
-        background: #FFFDFB;
-        border: 1px dashed #F5B08A;
+        background: #FBF9FF;
+        border: 1px dashed #B794F4;
         border-radius: 9px;
     }
 
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #FC8019, #D46B10) !important;
+        background: linear-gradient(135deg, #6B46C1, #44337A) !important;
         color: #FFFFFF !important;
         border: 0 !important;
         border-radius: 8px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(252, 128, 25, 0.20);
+        box-shadow: 0 2px 7px rgba(107, 70, 193, 0.20);
     }
 
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #B85B06 !important;
+        background: #553C9A !important;
         color: #FFFFFF !important;
     }
 
     [data-testid="stDataFrame"] {
-        border: 1px solid var(--swiggy-border);
+        border: 1px solid var(--lavender-border);
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(252, 128, 25, 0.05);
+        box-shadow: 0 2px 9px rgba(107, 70, 193, 0.05);
     }
 
     [data-testid="stDataFrame"] th,
@@ -125,25 +125,25 @@ st.markdown("""
     }
 
     [data-testid="stDataFrame"] th {
-        background: #FFE8D6 !important;
-        color: #D46B10 !important;
+        background: #E9D8FD !important;
+        color: var(--lavender-dark) !important;
         font-weight: 700 !important;
     }
 
     hr {
-        border-color: #FCE8D8 !important;
+        border-color: #E9D8FD !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 5px;">
-    <div style="background: #FC8019; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: bold; box-shadow: 0 2px 6px rgba(252,128,25,0.3);">S</div>
+    <div style="background: #6B46C1; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: bold; box-shadow: 0 2px 6px rgba(107,70,193,0.3);">S</div>
     <h1 style="margin: 0; padding: 0; line-height: 1.1;">Swiggy Granular Ad Analytics & Merger Dashboard</h1>
 </div>
 """, unsafe_allow_html=True)
 
-st.write("Upload Swiggy granular advertising spreadsheets or CSV files. Inspect raw data, consolidated master tables, interactive month drill-down daily summaries, and multi-metric trend analytics.")
+st.write("Upload Swiggy granular advertising spreadsheets or CSV files. Inspect raw data, consolidated master tables, interactive day-wise selections, and multi-metric trend analytics.")
 
 def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     buffer = io.BytesIO()
@@ -151,11 +151,11 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     ws = wb.active
     ws.title = sheet_name[:31]
     
-    top_header_fill = PatternFill(start_color="FC8019", end_color="FC8019", fill_type="solid")
+    top_header_fill = PatternFill(start_color="6B46C1", end_color="6B46C1", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
     
-    sec_header_fill = PatternFill(start_color="FFE8D6", end_color="FFE8D6", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="D46B10")
+    sec_header_fill = PatternFill(start_color="E9D8FD", end_color="E9D8FD", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="44337A")
     
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
@@ -302,10 +302,10 @@ def convert_all_pivots_to_excel(pivot_dict):
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    top_header_fill = PatternFill(start_color="FC8019", end_color="FC8019", fill_type="solid")
+    top_header_fill = PatternFill(start_color="6B46C1", end_color="6B46C1", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="FFE8D6", end_color="FFE8D6", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="D46B10")
+    sec_header_fill = PatternFill(start_color="E9D8FD", end_color="E9D8FD", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="44337A")
     index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
     total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
@@ -583,12 +583,19 @@ if uploaded_files:
             months = [str(x).strip().upper() for x in df_input['Month'].dropna().unique()]
             return sorted(months, key=lambda x: MONTH_ORDER.get(x, 99))
 
-        def compute_grouped_table(df_subset, group_col, selected_item="All"):
+        def compute_grouped_table(df_subset, group_col, selected_item="All", day_expand=None):
             if group_col not in df_subset.columns:
                 return pd.DataFrame()
             
             df_working = df_subset.dropna(subset=[group_col]).copy()
             df_working[group_col] = df_working[group_col].astype(str)
+
+            if day_expand and day_expand != "All Days" and '_date_dt' in df_working.columns:
+                try:
+                    day_num = int(day_expand.replace("Day ", ""))
+                    df_working = df_working[df_working['_date_dt'].dt.day == day_num]
+                except ValueError:
+                    pass
             
             if selected_item and selected_item != "All":
                 df_working = df_working[df_working[group_col] == selected_item]
@@ -1027,21 +1034,21 @@ if uploaded_files:
 
                 fig_trend = make_subplots(specs=[[{"secondary_y": True}]])
                 metric_colors = {
-                    'GMV / Sales (₹)': '#FC8019',
-                    'Budget Burnt (₹)': '#F5B08A',
-                    'ROAS': '#D46B10',
-                    'Orders / Conversions': '#2B6CB0',
+                    'GMV / Sales (₹)': '#6B46C1',
+                    'Budget Burnt (₹)': '#B794F4',
+                    'ROAS': '#44337A',
+                    'Orders / Conversions': '#319795',
                     'Add To Cart (ATC)': '#38B2AC',
-                    'Impressions': '#9F7AEA',
+                    'Impressions': '#D69E2E',
                     'ACOS (%)': '#E53E3E',
-                    'CPM (₹)': '#D69E2E'
+                    'CPM (₹)': '#ED8936'
                 }
                 bar_metrics = {'GMV / Sales (₹)', 'Budget Burnt (₹)'}
 
                 for metric_label in selected_trend_metrics:
                     col_key = metric_map[metric_label]
                     use_sec_y = metric_label in ['ROAS', 'ACOS (%)', 'CPM (₹)']
-                    color = metric_colors.get(metric_label, '#FC8019')
+                    color = metric_colors.get(metric_label, '#6B46C1')
                     values = monthly_summary[col_key]
 
                     if metric_label in bar_metrics:
@@ -1052,36 +1059,41 @@ if uploaded_files:
                 fig_trend.update_layout(title="<b>Swiggy Multi-Metric Trend Analysis</b>", template='plotly_white', height=550)
                 st.plotly_chart(fig_trend, use_container_width=True)
 
+        def render_day_filtered_tab(df_in, group_column, select_label):
+            col_d1, col_d2 = st.columns(2)
+            with col_d1:
+                avail_days = ["All Days"] + [f"Day {d}" for d in sorted(df_in['_date_dt'].dt.day.dropna().unique())] if '_date_dt' in df_in.columns and df_in['_date_dt'].notna().any() else ["All Days"]
+                selected_day_filter = st.selectbox(f"Select Day Filter for {group_column}:", avail_days, key=f"{group_column}_day_sel")
+            with col_d2:
+                opts = ["All"] + sorted([str(x) for x in df_in[group_column].dropna().unique()])
+                sel_item = st.selectbox(select_label, opts, key=f"{group_column}_item_sel")
+
+            grouped_res = compute_grouped_table(df_in, group_column, selected_item=sel_item, day_expand=selected_day_filter)
+            if not grouped_res.empty:
+                st.dataframe(format_dashboard_dataframe(grouped_res), use_container_width=True, hide_index=True)
+            else:
+                st.info("No data available for the selected day and entity filter.")
+
         with main_tab5:
             if 'CAMPAIGN_NAME' in filtered_df.columns:
-                c_opts = ["All"] + sorted([str(x) for x in filtered_df['CAMPAIGN_NAME'].dropna().unique()])
-                sel_c = st.selectbox("Select Campaign Name:", c_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'CAMPAIGN_NAME', sel_c)), use_container_width=True, hide_index=True)
+                render_day_filtered_tab(filtered_df, 'CAMPAIGN_NAME', "Select Campaign Name:")
 
         with main_tab6:
             if 'CITY' in filtered_df.columns:
-                city_opts = ["All"] + sorted([str(x) for x in filtered_df['CITY'].dropna().unique()])
-                sel_city = st.selectbox("Select City:", city_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'CITY', sel_city)), use_container_width=True, hide_index=True)
+                render_day_filtered_tab(filtered_df, 'CITY', "Select City:")
 
         with main_tab7:
             if 'PRODUCT_NAME' in filtered_df.columns:
-                prod_opts = ["All"] + sorted([str(x) for x in filtered_df['PRODUCT_NAME'].dropna().unique()])
-                sel_prod = st.selectbox("Select Product Name:", prod_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'PRODUCT_NAME', sel_prod)), use_container_width=True, hide_index=True)
+                render_day_filtered_tab(filtered_df, 'PRODUCT_NAME', "Select Product Name:")
 
         with main_tab8:
             if 'AD_PROPERTY' in filtered_df.columns:
-                prop_opts = ["All"] + sorted([str(x) for x in filtered_df['AD_PROPERTY'].dropna().unique()])
-                sel_prop = st.selectbox("Select Ad Property:", prop_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, 'AD_PROPERTY', sel_prop)), use_container_width=True, hide_index=True)
+                render_day_filtered_tab(filtered_df, 'AD_PROPERTY', "Select Ad Property:")
 
         with main_tab9:
             kw_col = 'KEYWORD' if 'KEYWORD' in filtered_df.columns else ('PRODUCT_NAME' if 'PRODUCT_NAME' in filtered_df.columns else None)
             if kw_col:
-                kw_opts = ["All"] + sorted([str(x) for x in filtered_df[kw_col].dropna().unique()])
-                sel_kw = st.selectbox(f"Select {kw_col}:", kw_opts)
-                st.dataframe(format_dashboard_dataframe(compute_grouped_table(filtered_df, kw_col, sel_kw)), use_container_width=True, hide_index=True)
+                render_day_filtered_tab(filtered_df, kw_col, f"Select {kw_col}:")
 
         with main_tab10:
             if 'Week' in filtered_df.columns and filtered_df['Week'].notna().any():
