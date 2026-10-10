@@ -583,7 +583,7 @@ if uploaded_files:
             months = [str(x).strip().upper() for x in df_input['Month'].dropna().unique()]
             return sorted(months, key=lambda x: MONTH_ORDER.get(x, 99))
 
-        def compute_grouped_table(df_subset, group_col, selected_item="All", selected_month="All Months", day_expand=False):
+        def compute_grouped_table(df_subset, group_col, selected_item="All", selected_month="All Months", day_expand=False, search_query=""):
             if group_col not in df_subset.columns:
                 return pd.DataFrame()
             
@@ -595,6 +595,9 @@ if uploaded_files:
             
             if selected_item and selected_item != "All":
                 df_working = df_working[df_working[group_col] == selected_item]
+
+            if search_query.strip():
+                df_working = df_working[df_working[group_col].str.contains(search_query.strip(), case=False, na=False)]
             
             if df_working.empty:
                 return pd.DataFrame()
@@ -832,7 +835,7 @@ if uploaded_files:
                     out[col] = out[col].map(lambda v: _format_dashboard_value(v, col))
             return out
 
-        def render_unified_single_table(df_to_show, key_prefix="mom"):
+        def render_unified_single_table(df_to_show, key_prefix="mom", expandable_col=None):
             if df_to_show is None or df_to_show.empty: return
             working_df = df_to_show.copy()
             bottom_rows = None
@@ -846,6 +849,11 @@ if uploaded_files:
             else:
                 main_df = working_df
                 bottom_rows = None
+
+            if expandable_col and not isinstance(main_df.columns, pd.MultiIndex):
+                search_term_filter = st.text_input(f"🔍 Filter {expandable_col} in Table:", "", key=f"{key_prefix}_search_filter")
+                if search_term_filter.strip():
+                    main_df = main_df[main_df.index.astype(str).str.contains(search_term_filter.strip(), case=False, na=False)]
 
             sort_cols = [str(c) for c in main_df.columns] if not isinstance(main_df.columns, pd.MultiIndex) else [f"{c[0]} - {c[1]}" for c in main_df.columns]
             c_sort1, c_sort2 = st.columns([3, 1])
@@ -874,11 +882,6 @@ if uploaded_files:
                     if val_str.startswith('-'): return 'background-color: #f8d7da; color: #721c24; font-weight: bold;'
                     elif val_str.startswith('+'): return 'background-color: #d4edda; color: #155724; font-weight: bold;'
                 return ''
-
-            if hasattr(unified_df.style, "map"):
-                styled_df = unified_df.style.map(highlight_percentage_cells)
-            else:
-                styled_df = unified_df.style.applymap(highlight_percentage_cells)
 
             display_df = format_dashboard_dataframe(unified_df)
             st.dataframe(
@@ -958,13 +961,19 @@ if uploaded_files:
             city_pivot = create_mom_comparison_table(final_df, 'CITY') if 'CITY' in final_df.columns else None
             prod_pivot = create_mom_comparison_table(final_df, 'PRODUCT_NAME') if 'PRODUCT_NAME' in final_df.columns else None
             prop_pivot = create_mom_comparison_table(final_df, 'AD_PROPERTY') if 'AD_PROPERTY' in final_df.columns else None
+            
+            kw_col = 'KEYWORD' if 'KEYWORD' in final_df.columns else ('PRODUCT_NAME' if 'PRODUCT_NAME' in final_df.columns else None)
+            kw_pivot = create_mom_comparison_table(final_df, kw_col) if kw_col else None
+            week_pivot = create_mom_comparison_table(final_df, 'Week') if ('Week' in final_df.columns and final_df['Week'].notna().any()) else None
 
-            comp_sub_tab0, comp_sub_tab1, comp_sub_tab2, comp_sub_tab3, comp_sub_tab4 = st.tabs([
+            comp_sub_tab0, comp_sub_tab1, comp_sub_tab2, comp_sub_tab3, comp_sub_tab4, comp_sub_tab5, comp_sub_tab6 = st.tabs([
                 "📅 Monthly Summary",
                 "🎯 Campaign Comparison",
                 "🏙️ City Comparison",
                 "📦 Product Comparison",
-                "📢 Ad Property Comparison"
+                "📢 Ad Property Comparison",
+                "🔎 Keyword / Search Comparison",
+                "📅 Weekly Comparison"
             ])
 
             with comp_sub_tab0:
@@ -998,6 +1007,12 @@ if uploaded_files:
             with comp_sub_tab4:
                 if prop_pivot is not None and not prop_pivot.empty:
                     render_unified_single_table(prop_pivot, key_prefix="prop_pivot")
+            with comp_sub_tab5:
+                if kw_pivot is not None and not kw_pivot.empty:
+                    render_unified_single_table(kw_pivot, key_prefix="kw_pivot", expandable_col=kw_col)
+            with comp_sub_tab6:
+                if week_pivot is not None and not week_pivot.empty:
+                    render_unified_single_table(week_pivot, key_prefix="week_pivot")
 
             st.divider()
             mom_dict = {
@@ -1005,7 +1020,9 @@ if uploaded_files:
                 "Campaign_MoM": camp_pivot,
                 "City_MoM": city_pivot,
                 "Product_MoM": prod_pivot,
-                "AdProperty_MoM": prop_pivot
+                "AdProperty_MoM": prop_pivot,
+                "Keyword_MoM": kw_pivot,
+                "Weekly_MoM": week_pivot
             }
             all_pivots_bytes = convert_all_pivots_to_excel(mom_dict)
             st.download_button(
