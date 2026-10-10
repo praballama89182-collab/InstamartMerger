@@ -17,16 +17,16 @@ st.set_page_config(
 st.markdown("""
 <style>
     :root {
-        --lavender-primary: #7B68EE;
-        --lavender-dark: #483D8B;
-        --lavender-light: #F3F3FF;
-        --lavender-soft: #D3D3FF;
-        --lavender-border: #B1B1FF;
+        --lavender-primary: #9370DB;
+        --lavender-dark: #4B0082;
+        --lavender-light: #F8F8FF;
+        --lavender-soft: #E6E6FA;
+        --lavender-border: #D8BFD8;
         --lavender-text: #2D3748;
     }
 
     .stApp {
-        background: linear-gradient(180deg, #F9F9FF 0%, #FFFFFF 40%);
+        background: linear-gradient(180deg, #FAF8FF 0%, #FFFFFF 40%);
         color: var(--lavender-text);
     }
 
@@ -40,12 +40,12 @@ st.markdown("""
     }
 
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F3F3FF 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #F8F8FF 100%);
         border: 1px solid var(--lavender-border);
         border-left: 5px solid var(--lavender-primary);
-        border-radius: 12px;
+        border-radius: 14px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(123, 104, 238, 0.08);
+        box-shadow: 0 4px 14px rgba(147, 112, 219, 0.10);
     }
 
     [data-testid="stMetricLabel"] {
@@ -59,63 +59,65 @@ st.markdown("""
     }
 
     .stTabs [data-baseweb="tab-list"] {
-        gap: 5px;
-        background: #F3F3FF;
+        gap: 6px;
+        background: #F8F8FF;
         border: 1px solid var(--lavender-border);
-        border-radius: 12px;
-        padding: 5px;
+        border-radius: 14px;
+        padding: 6px;
+        box-shadow: 0 2px 8px rgba(147, 112, 219, 0.05);
     }
 
     .stTabs [data-baseweb="tab"] {
         height: 42px;
-        border-radius: 7px;
-        color: var(--lavender-primary);
+        border-radius: 10px;
+        color: #6A5ACD;
         font-weight: 600;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #7B68EE 0%, #483D8B 100%) !important;
+        background: linear-gradient(135deg, #9370DB 0%, #6A5ACD 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(123, 104, 238, 0.25);
+        box-shadow: 0 3px 9px rgba(147, 112, 219, 0.30);
     }
 
     [data-testid="stFileUploader"] {
         background: #FFFFFF;
         border: 1px solid var(--lavender-border);
-        border-radius: 12px;
-        padding: 8px;
-        box-shadow: 0 2px 8px rgba(123, 104, 238, 0.06);
+        border-radius: 14px;
+        padding: 10px;
+        box-shadow: 0 3px 10px rgba(147, 112, 219, 0.06);
     }
 
     [data-testid="stFileUploaderDropzone"] {
-        background: #F9F9FF;
-        border: 1px dashed #B1B1FF;
-        border-radius: 9px;
+        background: #F8F8FF;
+        border: 2px dashed #D8BFD8;
+        border-radius: 12px;
     }
 
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #7B68EE, #483D8B) !important;
+        background: linear-gradient(135deg, #9370DB, #6A5ACD) !important;
         color: #FFFFFF !important;
         border: 0 !important;
-        border-radius: 8px !important;
+        border-radius: 12px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(123, 104, 238, 0.20);
+        box-shadow: 0 3px 10px rgba(147, 112, 219, 0.25);
     }
 
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #483D8B !important;
+        background: #7B68EE !important;
         color: #FFFFFF !important;
+        box-shadow: 0 4px 12px rgba(147, 112, 219, 0.35);
     }
 
     [data-testid="stDataFrame"] {
         border: 1px solid var(--lavender-border);
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(123, 104, 238, 0.05);
+        box-shadow: 0 3px 10px rgba(147, 112, 219, 0.06);
     }
 
     [data-testid="stDataFrame"] th,
@@ -125,20 +127,20 @@ st.markdown("""
     }
 
     [data-testid="stDataFrame"] th {
-        background: #D3D3FF !important;
+        background: #E6E6FA !important;
         color: var(--lavender-dark) !important;
         font-weight: 700 !important;
     }
 
     hr {
-        border-color: #D3D3FF !important;
+        border-color: #E6E6FA !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 5px;">
-    <div style="background: #7B68EE; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: bold; box-shadow: 0 2px 6px rgba(123,104,238,0.3);">S</div>
+    <div style="background: #9370DB; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; font-weight: bold; box-shadow: 0 3px 8px rgba(147,112,219,0.35);">S</div>
     <h1 style="margin: 0; padding: 0; line-height: 1.1;">Swiggy Granular Ad Analytics & Merger Dashboard</h1>
 </div>
 """, unsafe_allow_html=True)
@@ -151,16 +153,16 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     ws = wb.active
     ws.title = sheet_name[:31]
     
-    top_header_fill = PatternFill(start_color="7B68EE", end_color="7B68EE", fill_type="solid")
+    top_header_fill = PatternFill(start_color="9370DB", end_color="9370DB", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
     
-    sec_header_fill = PatternFill(start_color="D3D3FF", end_color="D3D3FF", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="483D8B")
+    sec_header_fill = PatternFill(start_color="E6E6FA", end_color="E6E6FA", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="4B0082")
     
-    index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+    index_fill = PatternFill(start_color="F9F9FB", end_color="F9F9FB", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
     
-    total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
+    total_fill = PatternFill(start_color="EFEFF5", end_color="EFEFF5", fill_type="solid")
     total_font = Font(name="Calibri", size=10, bold=True, color="000000")
     
     data_font = Font(name="Calibri", size=10, color="000000")
@@ -169,10 +171,10 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     align_left = Alignment(horizontal="left", vertical="center", wrap_text=False)
     
     thin_border = Border(
-        left=Side(style='thin', color='BFBFBF'),
-        right=Side(style='thin', color='BFBFBF'),
-        top=Side(style='thin', color='BFBFBF'),
-        bottom=Side(style='thin', color='BFBFBF')
+        left=Side(style='thin', color='D8BFD8'),
+        right=Side(style='thin', color='D8BFD8'),
+        top=Side(style='thin', color='D8BFD8'),
+        bottom=Side(style='thin', color='D8BFD8')
     )
 
     if isinstance(pivot_df.columns, pd.MultiIndex):
@@ -302,23 +304,23 @@ def convert_all_pivots_to_excel(pivot_dict):
     wb = openpyxl.Workbook()
     wb.remove(wb.active)
 
-    top_header_fill = PatternFill(start_color="7B68EE", end_color="7B68EE", fill_type="solid")
+    top_header_fill = PatternFill(start_color="9370DB", end_color="9370DB", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="D3D3FF", end_color="D3D3FF", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="483D8B")
-    index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+    sec_header_fill = PatternFill(start_color="E6E6FA", end_color="E6E6FA", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="4B0082")
+    index_fill = PatternFill(start_color="F9F9FB", end_color="F9F9FB", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
-    total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
+    total_fill = PatternFill(start_color="EFEFF5", end_color="EFEFF5", fill_type="solid")
     total_font = Font(name="Calibri", size=10, bold=True, color="000000")
     data_font = Font(name="Calibri", size=10, color="000000")
     
     align_center = Alignment(horizontal="center", vertical="center", wrap_text=False)
     align_left = Alignment(horizontal="left", vertical="center", wrap_text=False)
     thin_border = Border(
-        left=Side(style='thin', color='BFBFBF'),
-        right=Side(style='thin', color='BFBFBF'),
-        top=Side(style='thin', color='BFBFBF'),
-        bottom=Side(style='thin', color='BFBFBF')
+        left=Side(style='thin', color='D8BFD8'),
+        right=Side(style='thin', color='D8BFD8'),
+        top=Side(style='thin', color='D8BFD8'),
+        bottom=Side(style='thin', color='D8BFD8')
     )
 
     for sheet_name, pivot_df in pivot_dict.items():
@@ -579,9 +581,9 @@ if uploaded_files:
             "SEPTEMBER": 9, "OCTOBER": 10, "NOVEMBER": 11, "DECEMBER": 12
         }
 
-        def get_calendar_months(df_input):
+        def get_calendar_months(df_input, reverse=False):
             months = [str(x).strip().upper() for x in df_input['Month'].dropna().unique()]
-            return sorted(months, key=lambda x: MONTH_ORDER.get(x, 99))
+            return sorted(months, key=lambda x: MONTH_ORDER.get(x, 99), reverse=reverse)
 
         def compute_grouped_table(df_subset, group_col, selected_item="All", selected_month="All Months", day_expand=False, search_query=""):
             if group_col not in df_subset.columns:
@@ -647,7 +649,7 @@ if uploaded_files:
                 res_df['SALES'] = res_df['SALES'].round(2)
                 return res_df
 
-        def create_mom_comparison_table(df_input, entity_col):
+        def create_mom_comparison_table(df_input, entity_col, reverse_months=True):
             if entity_col not in df_input.columns:
                 return pd.DataFrame()
             
@@ -674,7 +676,7 @@ if uploaded_files:
             )
 
             metrics_order = ['Impressions', 'CPM', 'ATC', 'Orders', 'Spends', 'Sales', 'ROAS', 'ACOS']
-            all_months = get_calendar_months(df_input)
+            all_months = get_calendar_months(df_input, reverse=reverse_months)
             
             pivot_df = pivot_df.reorder_levels([1, 0], axis=1)
             sorted_cols = pd.MultiIndex.from_product([all_months, metrics_order], names=['Month', 'Metric'])
@@ -711,7 +713,7 @@ if uploaded_files:
             if working_df.empty:
                 return pd.DataFrame()
 
-            all_months = get_calendar_months(df_input)
+            all_months = get_calendar_months(df_input, reverse=False)
 
             if expand_month and expand_month in all_months and '_date_dt' in working_df.columns and working_df['_date_dt'].notna().any():
                 rows_list = []
@@ -892,7 +894,7 @@ if uploaded_files:
             )
 
         st.markdown("### 🔍 Global Dashboard Filters")
-        available_months = ["All Months"] + get_calendar_months(final_df)
+        available_months = ["All Months"] + get_calendar_months(final_df, reverse=True)
         selected_month = st.selectbox("Select Month Across Dashboard (Excluding Comparison Tables)", available_months)
 
         filtered_df = final_df.copy()
@@ -957,14 +959,14 @@ if uploaded_files:
 
         with main_tab3:
             st.subheader("📊 Month-on-Month Comparison Tables")
-            camp_pivot = create_mom_comparison_table(final_df, 'CAMPAIGN_NAME') if 'CAMPAIGN_NAME' in final_df.columns else None
-            city_pivot = create_mom_comparison_table(final_df, 'CITY') if 'CITY' in final_df.columns else None
-            prod_pivot = create_mom_comparison_table(final_df, 'PRODUCT_NAME') if 'PRODUCT_NAME' in final_df.columns else None
-            prop_pivot = create_mom_comparison_table(final_df, 'AD_PROPERTY') if 'AD_PROPERTY' in final_df.columns else None
+            camp_pivot = create_mom_comparison_table(final_df, 'CAMPAIGN_NAME', reverse_months=True) if 'CAMPAIGN_NAME' in final_df.columns else None
+            city_pivot = create_mom_comparison_table(final_df, 'CITY', reverse_months=True) if 'CITY' in final_df.columns else None
+            prod_pivot = create_mom_comparison_table(final_df, 'PRODUCT_NAME', reverse_months=True) if 'PRODUCT_NAME' in final_df.columns else None
+            prop_pivot = create_mom_comparison_table(final_df, 'AD_PROPERTY', reverse_months=True) if 'AD_PROPERTY' in final_df.columns else None
             
             kw_col = 'KEYWORD' if 'KEYWORD' in final_df.columns else ('PRODUCT_NAME' if 'PRODUCT_NAME' in final_df.columns else None)
-            kw_pivot = create_mom_comparison_table(final_df, kw_col) if kw_col else None
-            week_pivot = create_mom_comparison_table(final_df, 'Week') if ('Week' in final_df.columns and final_df['Week'].notna().any()) else None
+            kw_pivot = create_mom_comparison_table(final_df, kw_col, reverse_months=True) if kw_col else None
+            week_pivot = create_mom_comparison_table(final_df, 'Week', reverse_months=True) if ('Week' in final_df.columns and final_df['Week'].notna().any()) else None
 
             comp_sub_tab0, comp_sub_tab1, comp_sub_tab2, comp_sub_tab3, comp_sub_tab4, comp_sub_tab5, comp_sub_tab6 = st.tabs([
                 "📅 Monthly Summary",
@@ -978,7 +980,7 @@ if uploaded_files:
 
             with comp_sub_tab0:
                 st.markdown("#### Monthly Comparison Summary Table")
-                all_cal_months = get_calendar_months(final_df)
+                all_cal_months = get_calendar_months(final_df, reverse=False)
                 expand_choice = st.selectbox("Click / Select Month to Expand into Daily Breakdown (Day 1 → Day 31):", ["None (Standard Monthly View)"] + all_cal_months, key="monthly_summary_expand_select")
                 target_expand = expand_choice if expand_choice != "None (Standard Monthly View)" else None
 
@@ -1035,7 +1037,7 @@ if uploaded_files:
 
         with main_tab4:
             st.subheader("📈 Interactive Multi-Metric Trend Analytics")
-            all_df_months = get_calendar_months(final_df)
+            all_df_months = get_calendar_months(final_df, reverse=True)
             selected_trend_months = st.multiselect("Select Months:", options=all_df_months, default=all_df_months, key="trend_m")
 
             metric_map = {
@@ -1071,9 +1073,9 @@ if uploaded_files:
 
                 fig_trend = make_subplots(specs=[[{"secondary_y": True}]])
                 metric_colors = {
-                    'GMV / Sales (₹)': '#7B68EE',
-                    'Budget Burnt (₹)': '#B1B1FF',
-                    'ROAS': '#483D8B',
+                    'GMV / Sales (₹)': '#9370DB',
+                    'Budget Burnt (₹)': '#D8BFD8',
+                    'ROAS': '#4B0082',
                     'Orders / Conversions': '#319795',
                     'Add To Cart (ATC)': '#38B2AC',
                     'Impressions': '#D69E2E',
@@ -1085,7 +1087,7 @@ if uploaded_files:
                 for metric_label in selected_trend_metrics:
                     col_key = metric_map[metric_label]
                     use_sec_y = metric_label in ['ROAS', 'ACOS (%)', 'CPM (₹)']
-                    color = metric_colors.get(metric_label, '#7B68EE')
+                    color = metric_colors.get(metric_label, '#9370DB')
                     values = monthly_summary[col_key]
 
                     if metric_label in bar_metrics:
@@ -1099,7 +1101,7 @@ if uploaded_files:
         def render_month_day_filtered_tab(df_in, group_column, select_label):
             col_m1, col_m2, col_m3 = st.columns([2, 2, 2])
             with col_m1:
-                avail_months = ["All Months"] + get_calendar_months(df_in)
+                avail_months = ["All Months"] + get_calendar_months(df_in, reverse=True)
                 sel_m = st.selectbox(f"Select Month for {group_column}:", avail_months, key=f"{group_column}_month_sel")
             with col_m2:
                 day_expand_toggle = st.checkbox("Expand Day-Wise (1st - 31st)", key=f"{group_column}_day_toggle")
