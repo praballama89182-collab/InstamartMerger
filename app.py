@@ -314,7 +314,7 @@ with scol5:
     s5 = st.file_uploader("Upload Sales File 5", type=["csv", "xlsx", "xls"], key="sales5")
     if s5: uploaded_sales_files.append(s5)
 
-# Process Sales Files
+# Process Sales Files robustly (handling metadata rows/header offsets)
 sales_dfs_list = []
 if uploaded_sales_files:
     for s_file in uploaded_sales_files:
@@ -325,8 +325,21 @@ if uploaded_sales_files:
             else:
                 s_xls = pd.ExcelFile(s_file)
                 for s_sheet in s_xls.sheet_names:
-                    sdf = pd.read_excel(s_xls, sheet_name=s_sheet)
-                    sales_dfs_list.append(sdf)
+                    # Read first few rows to check for metadata/title rows (e.g. Brand Metrics)
+                    temp_df = pd.read_excel(s_xls, sheet_name=s_sheet, nrows=5)
+                    # Check if 'ORDERED_DATE' or 'GMV' exists in row 0 headers
+                    has_date_col = any(c in temp_df.columns for c in ['ORDERED_DATE', 'Order Date', 'date', 'Date'])
+                    if not has_date_col:
+                        # Try reading with header=1 (skipping row 0 metadata)
+                        sdf = pd.read_excel(s_xls, sheet_name=s_sheet, header=1)
+                    else:
+                        sdf = temp_df.copy()
+                        # read full sheet with header=0
+                        sdf = pd.read_excel(s_xls, sheet_name=s_sheet, header=0)
+                    
+                    # Only append if it contains order/sales metrics
+                    if any(c in sdf.columns for c in ['ORDERED_DATE', 'Order Date', 'date', 'Date', 'GMV', 'UNITS_SOLD']):
+                        sales_dfs_list.append(sdf)
         except Exception as e:
             st.error(f"Error reading sales file {s_file.name}: {str(e)}")
 
@@ -562,13 +575,11 @@ if uploaded_files:
 
             res_df = pd.DataFrame(rows)
             
-            # Aggregate / Average row
             tot_spend = res_df['Spend'].sum()
             tot_orders = res_df['Orders'].sum()
             tot_sales = res_df['Sales'].sum()
             tot_qty = res_df['Qty Sold'].sum()
             tot_ov_sales = res_df['OV Sales'].sum()
-            tot_tot_orders = res_df['Orders'].sum() # or total ov orders
             
             avg_acos = round((tot_spend / tot_sales), 4) if tot_sales > 0 else 0.0
             avg_roas = round(tot_sales / tot_spend, 2) if tot_spend > 0 else 0.0
@@ -609,9 +620,6 @@ if uploaded_files:
             grouped['CPM'] = grouped.apply(lambda r: round((r['Spends'] / r['Impressions']) * 1000, 2) if r['Impressions'] > 0 else 0.0, axis=1)
             grouped['ROAS'] = grouped.apply(lambda r: round(r['Sales'] / r['Spends'], 2) if r['Spends'] > 0 else 0.0, axis=1)
             grouped['ACOS'] = grouped.apply(lambda r: round((r['Spends'] / r['Sales']) * 100, 2) if r['Sales'] > 0 else 0.0, axis=1)
-            
-            has_sales = not master_sales_df.empty and '_sales_dt' in master_sales_df.columns
-            # If sales available, we can compute TACOS/TROAS per entity if mapped, or display standard ad metrics
             
             pivot_df = grouped.pivot(
                 index=entity_col,
@@ -707,15 +715,16 @@ if uploaded_files:
             overall_tacos = round((total_ad_spends / total_overall_sales) * 100, 2) if total_overall_sales > 0 else 0.0
             overall_troas = round(total_overall_sales / total_ad_spends, 2) if total_ad_spends > 0 else 0.0
 
+            # 6 fields in 2 rows as requested: Ad Sales, Overall Sales, Ad ROAS / TACOS, TROAS, Ov Orders
             dcol1, dcol2, dcol3 = st.columns(3)
             with dcol1: st.metric("Ad Sales", f"₹{int(round(total_ad_sales)):,}")
-            with dcol2: st.metric("Total Overall Sales", f"₹{int(round(total_overall_sales)):,}")
+            with dcol2: st.metric("Overall Sales", f"₹{int(round(total_overall_sales)):,}")
             with dcol3: st.metric("Ad ROAS", f"{overall_ad_roas:.2f}x")
 
             dcol4, dcol5, dcol6 = st.columns(3)
             with dcol4: st.metric("TACOS", f"{overall_tacos:.2f}%")
             with dcol5: st.metric("TROAS", f"{overall_troas:.2f}")
-            with dcol6: st.metric("Spends", f"₹{int(round(total_ad_spends)):,}")
+            with dcol6: st.metric("Ov Orders", f"{total_overall_orders:,}")
         else:
             dcol1, dcol2, dcol3 = st.columns(3)
             with dcol1: st.metric("Ad Sales", f"₹{int(round(total_ad_sales)):,}")
@@ -828,7 +837,7 @@ if uploaded_files:
         buffer_multi = io.BytesIO()
         with pd.ExcelWriter(buffer_multi, engine='openpyxl') as writer:
             for raw_tab_name, df_list in consolidated_raw_tabs.items():
-                pd.concat(df_list, ignore_index=True).to_excel(writer, sheet_name=raw_tab_name[:31], index=False)
+                pd.concat(df_list, ignore_index=True).to_excel(writer, sheet_sheet_name=raw_tab_name[:31] if 'sheet_sheet_name' in locals() else raw_tab_name[:31], index=False)
             final_df.to_excel(writer, sheet_name='Consolidated_Master', index=False)
         buffer_multi.seek(0)
         st.download_button(
