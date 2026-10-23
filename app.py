@@ -10,104 +10,106 @@ from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 st.set_page_config(
     page_title="Swiggy Granular Ad & Sales Analytics Dashboard",
-    page_icon="🟣",
+    page_icon="📊",
     layout="wide"
 )
 
 st.markdown("""
 <style>
     :root {
-        --primary-purple: #7C3AED;
-        --primary-purple-dark: #5B21B6;
-        --primary-purple-light: #F5F3FF;
-        --primary-border: #DDD6FE;
-        --primary-text: #1F2937;
+        --bg-main: #EDF2F7;
+        --card-bg: #FFFFFF;
+        --border-color: #CBD5E0;
+        --text-main: #2D3748;
+        --accent-dark: #1A202C;
+        --accent-primary: #3182CE;
     }
     .stApp {
-        background: linear-gradient(180deg, #FBF9FF 0%, #FFFFFF 40%);
-        color: var(--primary-text);
+        background: var(--bg-main);
+        color: var(--text-main);
     }
     [data-testid="stHeader"] {
-        background: rgba(255,255,255,0.92);
+        background: rgba(237, 242, 247, 0.95);
     }
     h1, h2, h3 {
-        color: var(--primary-purple-dark) !important;
+        color: var(--accent-dark) !important;
         font-weight: 700 !important;
     }
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);
-        border: 1px solid var(--primary-border);
-        border-left: 5px solid var(--primary-purple);
+        background: linear-gradient(135deg, #FFFFFF 0%, #F7FAFC 100%);
+        border: 1px solid var(--border-color);
+        border-left: 5px solid var(--accent-primary);
         border-radius: 12px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(124, 58, 237, 0.08);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
     }
     [data-testid="stMetricLabel"] {
-        color: #4B5563 !important;
+        color: #4A5568 !important;
         font-weight: 600 !important;
     }
     [data-testid="stMetricValue"] {
-        color: var(--primary-purple-dark) !important;
+        color: var(--accent-dark) !important;
         font-weight: 750 !important;
     }
     /* Boxed Curved Selection Boxes / Inputs */
     div[data-baseweb="select"] > div, div.stSelectbox > div > div {
-        background-color: #F5F3FF !important;
-        border: 1px solid var(--primary-border) !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 6px rgba(124, 58, 237, 0.05);
+        background-color: #FFFFFF !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
     }
     .stTabs [data-baseweb="tab-list"] {
-        gap: 5px;
-        background: #F5F3FF;
-        border: 1px solid var(--primary-border);
+        gap: 6px;
+        background: #E2E8F0;
+        border: 1px solid var(--border-color);
         border-radius: 12px;
-        padding: 5px;
+        padding: 6px;
     }
     .stTabs [data-baseweb="tab"] {
         height: 42px;
-        border-radius: 9px;
-        color: #7C3AED;
+        border-radius: 8px;
+        color: #4A5568;
         font-weight: 600;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%) !important;
+        background: linear-gradient(135deg, #2D3748 0%, #1A202C 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(124, 58, 237, 0.25);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
     [data-testid="stFileUploader"] {
-        background: #FAFAFA;
-        border: 1px solid var(--primary-border);
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 10px;
-        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.05);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
     [data-testid="stFileUploaderDropzone"] {
-        background: #F5F3FF;
-        border: 1px dashed #C4B5FD;
+        background: #F7FAFC;
+        border: 1px dashed #A0AEC0;
         border-radius: 10px;
     }
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #7C3AED, #5B21B6) !important;
+        background: linear-gradient(135deg, #2D3748, #1A202C) !important;
         color: #FFFFFF !important;
         border: 0 !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(124, 58, 237, 0.20);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
     }
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #5B21B6 !important;
+        background: #1A202C !important;
         color: #FFFFFF !important;
     }
     [data-testid="stDataFrame"] {
-        border: 1px solid var(--primary-border);
-        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(124, 58, 237, 0.05);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        background: #FFFFFF;
     }
     [data-testid="stDataFrame"] th,
     [data-testid="stDataFrame"] td {
@@ -115,17 +117,17 @@ st.markdown("""
         vertical-align: middle !important;
     }
     [data-testid="stDataFrame"] th {
-        background: #EDE9FE !important;
-        color: #5B21B6 !important;
+        background: #CBD5E0 !important;
+        color: #1A202C !important;
         font-weight: 700 !important;
     }
     hr {
-        border-color: #E9D5FF !important;
+        border-color: #CBD5E0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🟣 Swiggy Granular Ad Analytics & Overall Sales Merger Dashboard")
+st.title("📊 Swiggy Granular Ad Analytics & Overall Sales Merger Dashboard")
 st.write("Upload Swiggy granular advertising spreadsheets/CSV files and Overall Sales reports. Analyze TACOS, TROAS, Ad Sales, Overall Sales, ACOS, ROAS, Daily Tracker, and multi-metric trends.")
 
 def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
@@ -140,13 +142,13 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
         buffer.seek(0)
         return buffer.getvalue()
     
-    top_header_fill = PatternFill(start_color="7C3AED", end_color="7C3AED", fill_type="solid")
+    top_header_fill = PatternFill(start_color="2D3748", end_color="2D3748", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="F5F3FF", end_color="F5F3FF", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="5B21B6")
-    index_fill = PatternFill(start_color="F9FAFB", end_color="F9FAFB", fill_type="solid")
+    sec_header_fill = PatternFill(start_color="E2E8F0", end_color="E2E8F0", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1A202C")
+    index_fill = PatternFill(start_color="F7FAFC", end_color="F7FAFC", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
-    total_fill = PatternFill(start_color="F3F4F6", end_color="F3F4F6", fill_type="solid")
+    total_fill = PatternFill(start_color="EDF2F7", end_color="EDF2F7", fill_type="solid")
     total_font = Font(name="Calibri", size=10, bold=True, color="000000")
     data_font = Font(name="Calibri", size=10, color="000000")
     
@@ -154,8 +156,8 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     align_left = Alignment(horizontal="left", vertical="center", wrap_text=False)
     
     thin_border = Border(
-        left=Side(style='thin', color='D1D5DB'), right=Side(style='thin', color='D1D5DB'),
-        top=Side(style='thin', color='D1D5DB'), bottom=Side(style='thin', color='D1D5DB')
+        left=Side(style='thin', color='CBD5E0'), right=Side(style='thin', color='CBD5E0'),
+        top=Side(style='thin', color='CBD5E0'), bottom=Side(style='thin', color='CBD5E0')
     )
 
     is_daily_tracker = ("Daily_Tracker" in sheet_name or "Daily" in sheet_name)
@@ -716,7 +718,7 @@ if uploaded_files:
             overall_tacos = round((total_ad_spends / total_overall_sales) * 100, 2) if total_overall_sales > 0 else 0.0
             overall_troas = round(total_overall_sales / total_ad_spends, 2) if total_ad_spends > 0 else 0.0
 
-            # 6 fields in 2 rows as requested: Ad Sales, Overall Sales, Ad ROAS / TACOS, TROAS, Ov Orders
+            # 6 fields in 2 rows: Ad Sales, Overall Sales, Ad ROAS / TACOS, TROAS, Ov Orders
             dcol1, dcol2, dcol3 = st.columns(3)
             with dcol1: st.metric("Ad Sales", f"₹{int(round(total_ad_sales)):,}")
             with dcol2: st.metric("Overall Sales", f"₹{int(round(total_overall_sales)):,}")
