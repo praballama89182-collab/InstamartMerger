@@ -10,97 +10,104 @@ from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 
 st.set_page_config(
     page_title="Swiggy Granular Ad & Sales Analytics Dashboard",
-    page_icon="🔵",
+    page_icon="🟣",
     layout="wide"
 )
 
 st.markdown("""
 <style>
     :root {
-        --primary-blue: #2B6CB0;
-        --primary-blue-dark: #1A365D;
-        --primary-blue-light: #EBF3FB;
-        --primary-border: #CBD5E0;
-        --primary-text: #2D3748;
+        --primary-purple: #7C3AED;
+        --primary-purple-dark: #5B21B6;
+        --primary-purple-light: #F5F3FF;
+        --primary-border: #DDD6FE;
+        --primary-text: #1F2937;
     }
     .stApp {
-        background: linear-gradient(180deg, #F7FAFC 0%, #FFFFFF 40%);
+        background: linear-gradient(180deg, #FBF9FF 0%, #FFFFFF 40%);
         color: var(--primary-text);
     }
     [data-testid="stHeader"] {
         background: rgba(255,255,255,0.92);
     }
     h1, h2, h3 {
-        color: var(--primary-blue-dark) !important;
+        color: var(--primary-purple-dark) !important;
         font-weight: 700 !important;
     }
     [data-testid="stMetric"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #EBF3FB 100%);
+        background: linear-gradient(135deg, #FFFFFF 0%, #F5F3FF 100%);
         border: 1px solid var(--primary-border);
-        border-left: 5px solid var(--primary-blue);
+        border-left: 5px solid var(--primary-purple);
         border-radius: 12px;
         padding: 14px 18px;
-        box-shadow: 0 3px 12px rgba(43, 108, 176, 0.08);
+        box-shadow: 0 3px 12px rgba(124, 58, 237, 0.08);
     }
     [data-testid="stMetricLabel"] {
-        color: #4A5568 !important;
+        color: #4B5563 !important;
         font-weight: 600 !important;
     }
     [data-testid="stMetricValue"] {
-        color: var(--primary-blue-dark) !important;
+        color: var(--primary-purple-dark) !important;
         font-weight: 750 !important;
+    }
+    /* Boxed Curved Selection Boxes / Inputs */
+    div[data-baseweb="select"] > div, div.stSelectbox > div > div {
+        background-color: #F5F3FF !important;
+        border: 1px solid var(--primary-border) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 6px rgba(124, 58, 237, 0.05);
     }
     .stTabs [data-baseweb="tab-list"] {
         gap: 5px;
-        background: #EBF3FB;
+        background: #F5F3FF;
         border: 1px solid var(--primary-border);
         border-radius: 12px;
         padding: 5px;
     }
     .stTabs [data-baseweb="tab"] {
         height: 42px;
-        border-radius: 7px;
-        color: #2B6CB0;
+        border-radius: 9px;
+        color: #7C3AED;
         font-weight: 600;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #2B6CB0 0%, #1A365D 100%) !important;
+        background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%) !important;
         color: #FFFFFF !important;
-        box-shadow: 0 2px 7px rgba(43, 108, 176, 0.25);
+        box-shadow: 0 2px 7px rgba(124, 58, 237, 0.25);
     }
     [data-testid="stFileUploader"] {
-        background: #FFFFFF;
+        background: #FAFAFA;
         border: 1px solid var(--primary-border);
         border-radius: 12px;
-        padding: 8px;
-        box-shadow: 0 2px 8px rgba(43, 108, 176, 0.06);
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(124, 58, 237, 0.05);
     }
     [data-testid="stFileUploaderDropzone"] {
-        background: #F7FAFC;
-        border: 1px dashed #A3C9F1;
-        border-radius: 9px;
+        background: #F5F3FF;
+        border: 1px dashed #C4B5FD;
+        border-radius: 10px;
     }
     [data-testid="stFileUploader"] button,
     .stDownloadButton button,
     .stButton button {
-        background: linear-gradient(135deg, #2B6CB0, #1A365D) !important;
+        background: linear-gradient(135deg, #7C3AED, #5B21B6) !important;
         color: #FFFFFF !important;
         border: 0 !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         font-weight: 650 !important;
-        box-shadow: 0 2px 7px rgba(43, 108, 176, 0.20);
+        box-shadow: 0 2px 7px rgba(124, 58, 237, 0.20);
     }
     [data-testid="stFileUploader"] button:hover,
     .stDownloadButton button:hover,
     .stButton button:hover {
-        background: #1A365D !important;
+        background: #5B21B6 !important;
         color: #FFFFFF !important;
     }
     [data-testid="stDataFrame"] {
         border: 1px solid var(--primary-border);
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 2px 9px rgba(43, 108, 176, 0.05);
+        box-shadow: 0 2px 9px rgba(124, 58, 237, 0.05);
     }
     [data-testid="stDataFrame"] th,
     [data-testid="stDataFrame"] td {
@@ -108,17 +115,17 @@ st.markdown("""
         vertical-align: middle !important;
     }
     [data-testid="stDataFrame"] th {
-        background: #D0E3F8 !important;
-        color: #1A365D !important;
+        background: #EDE9FE !important;
+        color: #5B21B6 !important;
         font-weight: 700 !important;
     }
     hr {
-        border-color: #E2E8F0 !important;
+        border-color: #E9D5FF !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🔵 Swiggy Granular Ad Analytics & Overall Sales Merger Dashboard")
+st.title("🟣 Swiggy Granular Ad Analytics & Overall Sales Merger Dashboard")
 st.write("Upload Swiggy granular advertising spreadsheets/CSV files and Overall Sales reports. Analyze TACOS, TROAS, Ad Sales, Overall Sales, ACOS, ROAS, Daily Tracker, and multi-metric trends.")
 
 def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
@@ -133,13 +140,13 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
         buffer.seek(0)
         return buffer.getvalue()
     
-    top_header_fill = PatternFill(start_color="2B6CB0", end_color="2B6CB0", fill_type="solid")
+    top_header_fill = PatternFill(start_color="7C3AED", end_color="7C3AED", fill_type="solid")
     top_header_font = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
-    sec_header_fill = PatternFill(start_color="EBF3FB", end_color="EBF3FB", fill_type="solid")
-    sec_header_font = Font(name="Calibri", size=10, bold=True, color="1A365D")
-    index_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
+    sec_header_fill = PatternFill(start_color="F5F3FF", end_color="F5F3FF", fill_type="solid")
+    sec_header_font = Font(name="Calibri", size=10, bold=True, color="5B21B6")
+    index_fill = PatternFill(start_color="F9FAFB", end_color="F9FAFB", fill_type="solid")
     index_font = Font(name="Calibri", size=10, bold=True, color="000000")
-    total_fill = PatternFill(start_color="E9ECEF", end_color="E9ECEF", fill_type="solid")
+    total_fill = PatternFill(start_color="F3F4F6", end_color="F3F4F6", fill_type="solid")
     total_font = Font(name="Calibri", size=10, bold=True, color="000000")
     data_font = Font(name="Calibri", size=10, color="000000")
     
@@ -147,8 +154,8 @@ def style_and_export_pivot(pivot_df, sheet_name="Comparison"):
     align_left = Alignment(horizontal="left", vertical="center", wrap_text=False)
     
     thin_border = Border(
-        left=Side(style='thin', color='BFBFBF'), right=Side(style='thin', color='BFBFBF'),
-        top=Side(style='thin', color='BFBFBF'), bottom=Side(style='thin', color='BFBFBF')
+        left=Side(style='thin', color='D1D5DB'), right=Side(style='thin', color='D1D5DB'),
+        top=Side(style='thin', color='D1D5DB'), bottom=Side(style='thin', color='D1D5DB')
     )
 
     is_daily_tracker = ("Daily_Tracker" in sheet_name or "Daily" in sheet_name)
@@ -314,7 +321,7 @@ with scol5:
     s5 = st.file_uploader("Upload Sales File 5", type=["csv", "xlsx", "xls"], key="sales5")
     if s5: uploaded_sales_files.append(s5)
 
-# Process Sales Files robustly (handling metadata rows/header offsets)
+# Robust Sales File Ingestion (handling header offsets & metadata sheets)
 sales_dfs_list = []
 if uploaded_sales_files:
     for s_file in uploaded_sales_files:
@@ -325,19 +332,13 @@ if uploaded_sales_files:
             else:
                 s_xls = pd.ExcelFile(s_file)
                 for s_sheet in s_xls.sheet_names:
-                    # Read first few rows to check for metadata/title rows (e.g. Brand Metrics)
                     temp_df = pd.read_excel(s_xls, sheet_name=s_sheet, nrows=5)
-                    # Check if 'ORDERED_DATE' or 'GMV' exists in row 0 headers
                     has_date_col = any(c in temp_df.columns for c in ['ORDERED_DATE', 'Order Date', 'date', 'Date'])
                     if not has_date_col:
-                        # Try reading with header=1 (skipping row 0 metadata)
                         sdf = pd.read_excel(s_xls, sheet_name=s_sheet, header=1)
                     else:
-                        sdf = temp_df.copy()
-                        # read full sheet with header=0
                         sdf = pd.read_excel(s_xls, sheet_name=s_sheet, header=0)
                     
-                    # Only append if it contains order/sales metrics
                     if any(c in sdf.columns for c in ['ORDERED_DATE', 'Order Date', 'date', 'Date', 'GMV', 'UNITS_SOLD']):
                         sales_dfs_list.append(sdf)
         except Exception as e:
@@ -837,7 +838,7 @@ if uploaded_files:
         buffer_multi = io.BytesIO()
         with pd.ExcelWriter(buffer_multi, engine='openpyxl') as writer:
             for raw_tab_name, df_list in consolidated_raw_tabs.items():
-                pd.concat(df_list, ignore_index=True).to_excel(writer, sheet_sheet_name=raw_tab_name[:31] if 'sheet_sheet_name' in locals() else raw_tab_name[:31], index=False)
+                pd.concat(df_list, ignore_index=True).to_excel(writer, sheet_name=raw_tab_name[:31], index=False)
             final_df.to_excel(writer, sheet_name='Consolidated_Master', index=False)
         buffer_multi.seek(0)
         st.download_button(
